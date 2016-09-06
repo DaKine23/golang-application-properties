@@ -1,4 +1,4 @@
-package golangapplicationproperties // import "dakine/golangapplicationproperties"
+package golangapplicationproperties
 
 import (
 	"bufio"
