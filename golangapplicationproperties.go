@@ -1,4 +1,4 @@
-package golang-application-properties
+package golangapplicationproperties
 
 import (
 	"bufio"
