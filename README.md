@@ -37,7 +37,7 @@ ap := p.Current()
 // check for "IsInitialized"
 if !ap.IsInitialized() {
     //only init if not already done
-    ap = ap.Init("./application.properties", true)
+    ap = ap.Init("./application.properties", false)
 }
 //get properties as a map m [string] sting
 m := ap.GetProps()
