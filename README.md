@@ -20,8 +20,8 @@ USAGE (simple)
 
 ```golang
 var p *golangapplicationproperties.Properties
-// Init with filename and debugging false
-ap = ap.Init("./application.properties", false)
+// Init with filename 
+ap = ap.Init("./application.properties")
 //get properties as a map m [string] sting
 m := ap.GetProps()
 // should print "1234"
@@ -37,7 +37,7 @@ ap := p.Current()
 // check for "IsInitialized"
 if !ap.IsInitialized() {
     //only init if not already done
-    ap = ap.Init("./application.properties", false)
+    ap = ap.Init("./application.properties")
 }
 //get properties as a map m [string] sting
 m := ap.GetProps()

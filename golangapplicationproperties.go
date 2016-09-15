@@ -2,10 +2,12 @@ package golangapplicationproperties
 
 import (
 	"bufio"
-	"fmt"
+	"io"
 	"os"
 	"strings"
 	"time"
+
+	"github.com/pkg/errors"
 )
 
 // ApplicationProperties is the Singleton Value for props to init them only once systemwide
@@ -16,14 +18,6 @@ type Properties struct {
 	FilePath    string
 	PropertyMap map[string]string
 	InitTime    time.Time
-	Debug       bool
-}
-
-func (ap *Properties) check(e error) {
-	if e != nil && ap.Debug {
-		fmt.Print("GAP debug :")
-		fmt.Println(e)
-	}
 }
 
 var propertyMap = make(map[string]string)
@@ -39,12 +33,14 @@ func (ap *Properties) setFilePath(newFilePath string) {
 }
 
 // Init initialize the properties usually only needs to be done once the property file changes or application starts
-func (ap *Properties) Init(newFilePath string, debug bool) Properties {
-	ApplicationProperties.Debug = debug
+func (ap *Properties) Init(newFilePath string) (Properties, error) {
 	ApplicationProperties.setFilePath(newFilePath)
-	ApplicationProperties.readProps()
+	err := ApplicationProperties.readProps()
+	if err != nil {
+		return ApplicationProperties, err
+	}
 	ApplicationProperties.InitTime = time.Now().Local().UTC()
-	return ApplicationProperties
+	return ApplicationProperties, err
 }
 
 //GetInitTime gets the time when last init has taken place
@@ -62,7 +58,9 @@ func (ap *Properties) readProps() error {
 	ap.PropertyMap = make(map[string]string)
 
 	file, err := os.Open(ap.FilePath)
-	ap.check(err)
+	if err != nil {
+		return errors.Wrap(err, "GAP could not open the property file")
+	}
 
 	reader := bufio.NewReader(file)
 
@@ -71,14 +69,14 @@ func (ap *Properties) readProps() error {
 		lineAsBytes, _, err := reader.ReadLine()
 
 		if err != nil {
-			if err.Error() != "EOF" {
-				ap.check(err)
+			if err != io.EOF {
+				return errors.Wrap(err, "GAP could not read the line of a property file")
 			}
 			break
 		}
 		lineAsString := strings.Split(string(lineAsBytes), "=")
-		ap.check(err)
-		if len(strings.TrimSpace(lineAsString[0])) > 0 {
+
+		if len(strings.TrimSpace(lineAsString[0])) > 0 && len(lineAsString) > 1 && !strings.HasPrefix(lineAsString[0], "#") {
 			ap.PropertyMap[strings.TrimSpace(lineAsString[0])] = strings.TrimSpace(lineAsString[len(lineAsString)-1])
 		}
 
