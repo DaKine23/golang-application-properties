@@ -20,37 +20,15 @@ type Properties struct {
 	InitTime    time.Time
 }
 
-var propertyMap = make(map[string]string)
-
-// GetProps returns the content of the property file that was read at InitTime
-func (ap *Properties) GetProps() map[string]string {
-
-	return ap.PropertyMap
-}
-
-func (ap *Properties) setFilePath(newFilePath string) {
-	ap.FilePath = newFilePath
-}
-
-// Init initialize the properties usually only needs to be done once the property file changes or application starts
-func (ap *Properties) Init(newFilePath string) (Properties, error) {
-	ApplicationProperties.setFilePath(newFilePath)
+// New initialize the properties usually only needs to be done once the property file changes or application starts
+func New(newFilePath string) (Properties, error) {
+	ApplicationProperties.FilePath = newFilePath
 	err := ApplicationProperties.readProps()
 	if err != nil {
 		return ApplicationProperties, err
 	}
 	ApplicationProperties.InitTime = time.Now().Local().UTC()
 	return ApplicationProperties, err
-}
-
-//GetInitTime gets the time when last init has taken place
-func (ap *Properties) GetInitTime() time.Time {
-	return ap.InitTime
-}
-
-// Current gets the ApplicationProperties Singleton Object
-func (ap *Properties) Current() Properties {
-	return ApplicationProperties
 }
 
 func (ap *Properties) readProps() error {
@@ -88,6 +66,6 @@ func (ap *Properties) readProps() error {
 }
 
 //IsInitialized tells you if the property file was already loaded
-func (ap *Properties) IsInitialized() bool {
-	return (len(ap.PropertyMap) > 0)
+func IsInitialized() bool {
+	return (len(ApplicationProperties.PropertyMap) > 0)
 }

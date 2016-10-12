@@ -7,18 +7,18 @@ import (
 )
 
 func TestInit(t *testing.T) {
-	var p *golangapplicationproperties.Properties
-	props, err := p.Init("golangapplicationproperties_test.go")
+
+	props, err := golangapplicationproperties.New("golangapplicationproperties_test.go")
 	if err != nil {
 		t.Error(err)
 	}
-	m := props.GetProps()
+	m := props.PropertyMap
 
-	if m["m :"] != "props.GetProps()" {
+	if m["m :"] != "props.PropertyMap" {
 		t.Error("wrong value for key \"m :\"")
 	}
 
-	_, err = p.Init("wasIeverThere?")
+	_, err = golangapplicationproperties.New("wasIeverThere?")
 
 	if err == nil {
 		t.Error("file should not be found")

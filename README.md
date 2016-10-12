@@ -12,35 +12,33 @@ IMPORT
 import "github.com/DaKine23/golangapplicationproperties"
 ```
 
-USAGE (simple)
+USAGE
 
 - place your file wherever you like most likely next to your go program
 - e.g. **application.properties**
 - add some values like **my.value = 1234** to the files
 
 ```golang
-var p *golangapplicationproperties.Properties
-// Init with filename 
-ap = ap.Init("./application.properties")
-//get properties as a map m [string] sting
-m := ap.GetProps()
-// should print "1234"
-println(m["my.value"])
-```
+	if !golangapplicationproperties.IsInitialized() {
+		golangapplicationproperties.New("application.properties")
+	}
 
-USAGE
+	_, err1 := fmt.Println(golangapplicationproperties.ApplicationProperties.PropertyMap["my.value"])
 
-```golang
-var p *golangapplicationproperties.Properties
-// get currently loaded properties (may somewhere else in the code)
-ap := p.Current()
-// check for "IsInitialized"
-if !ap.IsInitialized() {
-    //only init if not already done
-    ap = ap.Init("./application.properties")
-}
-//get properties as a map m [string] sting
-m := ap.GetProps()
-// should print "1234"
-println(m["my.value"])
+	if err1 != nil {
+		panic(err1) //handle error
+	}
+    
+    // or use it like that
+
+
+	p, err2 := golangapplicationproperties.New("application.properties")
+
+	if err2 != nil {
+		panic(err2) //handle error
+	}
+
+	fmt.Println(p.PropertyMap["my.value"])
+
+
 ```
