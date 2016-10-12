@@ -53,8 +53,11 @@ func (ap *Properties) readProps() error {
 			}
 			break
 		}
+		// ignore comments at the end of the line
+		lineAsStringWithComments := strings.SplitN(string(lineAsBytes), "#", 2)
 
-		lineAsString := strings.Split(string(lineAsBytes), "=")
+		// ignore all "=" after the first
+		lineAsString := strings.SplitN(lineAsStringWithComments[0], "=", 2)
 
 		if len(strings.TrimSpace(lineAsString[0])) > 0 && len(lineAsString) > 1 && !strings.HasPrefix(lineAsString[0], "#") {
 			ap.PropertyMap[strings.TrimSpace(lineAsString[0])] = strings.TrimSpace(lineAsString[len(lineAsString)-1])

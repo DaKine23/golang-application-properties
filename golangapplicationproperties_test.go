@@ -12,9 +12,9 @@ func TestInit(t *testing.T) {
 	if err != nil {
 		t.Error(err)
 	}
-	m := props.PropertyMap
+	m := props.PropertyMap //#some comment
 
-	if m["m :"] != "props.PropertyMap" {
+	if m["m :"] != "props.PropertyMap //" {
 		t.Error("wrong value for key \"m :\"")
 	}
 
