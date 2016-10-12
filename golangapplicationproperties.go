@@ -39,6 +39,7 @@ func (ap *Properties) readProps() error {
 	if err != nil {
 		return errors.Wrap(err, "GAP could not open the property file")
 	}
+	defer file.Close()
 
 	reader := bufio.NewReader(file)
 
@@ -52,6 +53,7 @@ func (ap *Properties) readProps() error {
 			}
 			break
 		}
+
 		lineAsString := strings.Split(string(lineAsBytes), "=")
 
 		if len(strings.TrimSpace(lineAsString[0])) > 0 && len(lineAsString) > 1 && !strings.HasPrefix(lineAsString[0], "#") {
@@ -60,7 +62,6 @@ func (ap *Properties) readProps() error {
 
 	}
 
-	file.Close()
 	return nil
 
 }
