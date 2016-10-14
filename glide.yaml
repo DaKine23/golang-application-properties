@@ -1,0 +1,4 @@
+package: github.com/DaKine23/golangapplicationproperties
+import:
+- package: github.com/pkg/errors
+  version: ~0.8.0
