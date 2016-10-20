@@ -12,6 +12,8 @@ IMPORT
 import "github.com/DaKine23/golangapplicationproperties"
 ```
 
+
+
 USAGE
 
 - place your file wherever you like most likely next to your go program
@@ -20,7 +22,7 @@ USAGE
 
 ```golang
 	if !golangapplicationproperties.IsInitialized() {
-		golangapplicationproperties.New("application.properties")
+		golangapplicationproperties.NewProperties("application.properties")
 	}
 
 	_, err1 := fmt.Println(golangapplicationproperties.ApplicationProperties.PropertyMap["my.value"])
@@ -32,7 +34,7 @@ USAGE
     // or use it like that
 
 
-	p, err2 := golangapplicationproperties.New("application.properties")
+	p, err2 := golangapplicationproperties.NewProperties("application.properties")
 
 	if err2 != nil {
 		panic(err2) //handle error

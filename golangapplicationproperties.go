@@ -21,7 +21,7 @@ type Properties struct {
 }
 
 // New initialize the properties usually only needs to be done once the property file changes or application starts
-func New(newFilePath string) (*Properties, error) {
+func NewProperties(newFilePath string) (*Properties, error) {
 	ApplicationProperties.FilePath = newFilePath
 	err := ApplicationProperties.readProps()
 	if err != nil {
@@ -70,6 +70,8 @@ func (ap *Properties) readProps() error {
 }
 
 //IsInitialized tells you if the property file was already loaded
-func IsInitialized() bool {
-	return (len(ApplicationProperties.PropertyMap) > 0)
+func (ap *Properties) IsInitialized() bool {
+	var zeroValue time.Time
+	return ap.InitTime != zeroValue
+
 }

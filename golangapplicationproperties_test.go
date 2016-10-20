@@ -1,27 +1,55 @@
-package golangapplicationproperties_test
+package golangapplicationproperties
 
 import (
+	"fmt"
 	"testing"
-
-	"github.com/DaKine23/golangapplicationproperties"
+	"time"
 )
 
-func TestInit(t *testing.T) {
+func TestConstructor(t *testing.T) {
 
-	props, err := golangapplicationproperties.New("golangapplicationproperties_test.go")
+	var notInitialized Properties
+
+	if notInitialized.IsInitialized() {
+		t.Error("Properties was not initialized yet but IsInitialized returns true")
+	}
+
+	props, err := NewProperties("golangapplicationproperties_test.go") //#some comment
 	if err != nil {
 		t.Error(err)
 	}
-	m := props.PropertyMap //#some comment
 
-	if m["m :"] != "props.PropertyMap //" {
+	if !props.IsInitialized() {
+		t.Error("Properties was initialized but IsInitialized returns false")
+	}
+
+	m := props.PropertyMap
+
+	if m["props, err :"] != "NewProperties(\"golangapplicationproperties_test.go\") //" {
 		t.Error("wrong value for key \"m :\"")
 	}
 
-	_, err = golangapplicationproperties.New("wasIeverThere?")
+	fmt.Println("Filepath was :", props.FilePath)
+
+	var zeroValue time.Time
+	if props.InitTime == zeroValue {
+		t.Error("Init time was not set")
+	}
+
+	if props.FilePath != "golangapplicationproperties_test.go" {
+		t.Error("FilePath was not set")
+	}
+
+	_, err = NewProperties("wasIeverThere?")
 
 	if err == nil {
 		t.Error("file should not be found")
 	}
 
+}
+
+func BenchmarkInit(b *testing.B) {
+
+	props, _ := NewProperties("golangapplicationproperties_test.go")
+	props.IsInitialized()
 }
